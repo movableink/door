@@ -4,7 +4,8 @@ var express = require('express'),
   config = require('./config'),
   async = require('async'),
   gpio = require('pi-gpio'),
-  app = express();
+  app = express(),
+  exec = require('child_process').exec;
 
 app.configure(function(){
   app.set('port', process.env.PORT || config.port);
@@ -28,6 +29,7 @@ function delayPinWrite(pin, value, callback) {
 app.post("/api/garage/left", function(req, res) {
   async.series([
     function(callback) {
+      exec("play audio/tada.wav", function() {});
       // Open pin for output
       gpio.open(config.LEFT_GARAGE_PIN, "output", callback);
     },
